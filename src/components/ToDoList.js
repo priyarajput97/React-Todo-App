@@ -2,7 +2,12 @@ import React, { Component, useState } from "react";
 import ToDoItem from "./ToDoItem";
 import AddTodo from "./AddTodo";
 
+//make class to function component
 const ToDoList = () => {
+  //instead of normal state and setstate we will use useState method which will give us
+  //state and setState method to change the state
+
+  //note that we can name than anything here
   const [state, setState] = useState({
     toDos: [
       { id: 1, item: "Wake Up @ 7", status: true },
@@ -13,6 +18,7 @@ const ToDoList = () => {
 
   const addTodo = (todoName) => {
     todoName &&
+      //to change the state we wil use only setState
       setState({
         toDos: [
           ...state.toDos,
