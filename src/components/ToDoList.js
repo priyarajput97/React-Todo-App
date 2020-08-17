@@ -1,58 +1,63 @@
-import React, { Component } from 'react';
-import ToDoItem from './ToDoItem';
-import AddTodo from './AddTodo';
+import React, { Component, useState } from "react";
+import ToDoItem from "./ToDoItem";
+import AddTodo from "./AddTodo";
 
-class ToDoList extends Component {
+const ToDoList = () => {
+  const [state, setState] = useState({
+    toDos: [
+      { id: 1, item: "Wake Up @ 7", status: true },
+      { id: 2, item: "Take Shower", status: false },
+      { id: 3, item: "Go To Work", status: false },
+    ],
+  });
 
-    constructor() {
-        super();
-        this.state = {
-             toDos: [
-                 {id: 1, item: 'Wake Up @ 7', status: true},
-                 {id: 2, item: 'Take Shower', status: false},
-                 {id: 3, item: 'Go To Work', status: false}
-             ]
-        }
-    }
+  const addTodo = (todoName) => {
+    todoName &&
+      setState({
+        toDos: [
+          ...state.toDos,
+          {
+            id: state.toDos.length + 1,
+            item: todoName,
+            status: false,
+          },
+        ],
+      });
+  };
 
-    addTodo = (todoName) => {
-        todoName && this.setState({
-            toDos: this.pushTodo(todoName)
-        });
-    }
+  const deleteTodo = (todo) => {
+    setState({
+      toDos: state.toDos.filter((todoItem) => todoItem.id !== todo.id),
+    });
+  };
 
-    pushTodo(todoName) {
-        this.state.toDos.push({id: this.state.toDos.length + 1, item: todoName, status: false});
-        return this.state.toDos;
-    }
+  const updateStatus = (todo) => {
+    setState({
+      toDos: updateTodoListStatus(todo),
+    });
+  };
 
-    deleteTodo = (todo) => {
-        this.setState({
-            toDos: this.state.toDos.filter(todoItem => todoItem.id !== todo.id)
-        });
-    }
+  function updateTodoListStatus(todo) {
+    const selectedTodo = state.toDos.find(
+      (todoItem) => todoItem.id === todo.id
+    );
+    selectedTodo.status = !selectedTodo.status;
+    return state.toDos;
+  }
 
-    updateStatus = (todo) => {
-        this.setState({
-            toDos: this.updateTodoListStatus(todo)
-        })
-    }
-
-    updateTodoListStatus(todo) {
-        const selectedTodo = this.state.toDos.find(todoItem => todoItem.id === todo.id);
-        selectedTodo.status = !selectedTodo.status;
-        return this.state.toDos;
-    }
-
-    render() {
-        return (
-            <div className="todo-list-container">
-                {this.state.toDos.map(todo => <ToDoItem key={todo.id} todo={todo} deleteTodo={this.deleteTodo} 
-                    updateStatus={this.updateStatus}/>)}
-                <AddTodo addTodo={this.addTodo}/>
-            </div>
-        )
-    }
-}
+  return (
+    <div className="todo-list-container">
+      {state.toDos.map((todo) => (
+        <ToDoItem
+          key={todo.id}
+          todo={todo}
+          deleteTodo={deleteTodo}
+          updateStatus={updateStatus}
+        />
+      ))}
+      <AddTodo addTodo={addTodo} />
+    </div>
+  );
+};
 
 export default ToDoList;
