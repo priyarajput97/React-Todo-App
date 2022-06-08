@@ -18,6 +18,7 @@ class AddTodo extends Component {
         this.props.addTodo(this.state.todoName);
         this.setState({todoName: ''})
         console.log('hi');
+        console.log('hey');
     }
 
     render() {
